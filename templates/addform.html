@@ -1,0 +1,113 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="{% static 'style.css' %}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+</head>
+<body>
+
+<div class="sidebar">
+    <h3 style="text-align: center;font-size: 22px;">Logo</h3>
+    <div class="navmen">
+  <a  href="/">Home</a>
+  <a  class="active" href="/add_form/">Add Vehicle</a>
+  <a href="/shupd/">Update Vehicle</a>
+  <a href="/notifications/">Notifications</a>
+</div>
+</div>
+<div class="pht">
+  <div class="blak"></div>
+</div> 
+<div class="content"> 
+  <div id="msbx" class="msgss" style="display: none;">
+    <label class="msgs" id="msgss">nothing</label>
+    <i id="msgp" onclick="closemsg(id)" class="fas fa-times" ></i>
+</div>
+
+  {% csrf_token %}
+<div class="addform">
+    <div class="dabba" id="lgnbox">
+        <input class="name" type="text" name="f_name" id="nm" placeholder="Name">
+        <div id="upload-container">
+          <div id="upload-border">
+            <nobr>
+              <input type="text" id="upload-name" placeholder="Profile photo" disabled="true" />
+              <button id="upload-button" type="button">Select Vehicle photo</button>
+            </nobr>
+          </div>
+          <input type="file" id="hidden-upload" name="imgle" style="display:none"/> 
+        </div>
+        <input class="name" type="text" name="l_name" id="spd" placeholder="Speed">
+        <input class="name" type="text" name="u_name" id="avspd" placeholder="Average Speed">
+        <input class="name" type="text" name="temp" id="temm" placeholder="Temprature">
+        <input class="name" type="text" name="level" id="levl" placeholder="Fuel level">
+        <div class="boxer">  
+        <input  type="checkbox" name="sts" id="ests" ><span>Engine status</span>
+        </div>
+        <button type="submit" id="add_vehicle">Submit</button>
+    </div>
+</div>
+</form>
+</div>
+</body>
+<script>
+   document.querySelector("#upload-button").addEventListener("click", () => {
+  //clicks on the file input
+  document.querySelector("#hidden-upload").click();
+});
+
+//adds event listener on the hidden file input to listen for any changes
+document.querySelector("#hidden-upload").addEventListener("change", (event) => {
+  //gets the file name
+  document.querySelector("#upload-name").value = event.target.files[0].name;
+}); 
+document.getElementById('add_vehicle').addEventListener('click',add_vehicle)
+async function add_vehicle(){
+  var formData = new FormData();
+  var imagefile = document.querySelector('#hidden-upload');
+  var name=document.getElementById('nm').value;
+  var speed=document.getElementById('spd').value;
+  var average_speed=document.getElementById('avspd').value;
+  var Temprature=document.getElementById('temm').value;
+  var level=document.getElementById('levl').value;
+  var sts=document.getElementById('ests').value;
+  formData.append('name',name)
+  formData.append("static_map", imagefile.files[0]);
+  formData.append('speed',speed)
+  formData.append('average_speed',average_speed)
+  formData.append('Temprature',Temprature)
+  formData.append('Fuel_level',level)
+  formData.append('Engine_status',sts)
+  let response= await fetch('/add_vehicle/',{
+    method: 'POST',
+      mode: 'same-origin',  
+      headers:{
+        'Accept': 'application/json',
+      },
+      body: formData
+  })
+  if(response.ok){
+    let json = await response.json();
+        let message = json["message"];
+        if(message=='sucess'){
+          console.log('sucess')
+          document.getElementById('msbx').style.display="block";
+          document.getElementById('msgss').innerHTML='Vehicle added sucessfully!!'
+        }
+        else{
+          console.log(message)
+        }
+  }
+    }
+
+    function closemsg(d){
+    document.getElementById('msbx').style.display="none";
+    }
+  
+
+</script>
+</html>

@@ -1,0 +1,119 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="{% static 'style.css' %}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">  
+</head>
+<body>
+
+<div class="sidebar">
+    <h3 style="text-align: center;font-size: 22px;">Logo</h3>
+    <div class="navmen">
+  <a  href="/">Home</a>
+  <a  href="/add_form/">Add Vehicle</a>
+  <a class="active" href="/shupd/">Update Vehicle</a>
+  <a  href="/notifications/">Notifications</a>
+</div>
+</div>
+<div class="pht">
+  <div class="blak"></div>
+</div> 
+<div class="content"> 
+  <div id="msbx" class="msgss" style="display: none;">
+    <label class="msgs" id="msgss">nothing</label>
+    <i id="msgp" onclick="closemsg(id)" class="fas fa-times" ></i>
+</div>
+{% for d in dd %}
+<form action="/update_vehicle/{{ pk }}/" method="post" enctype="multipart/form-data" >
+<div class="addform">
+    <div class="dabba" id="lgnbox">
+        <div class="imgg">
+        <img src="{{ d.static_map.url }}" width="100px" height="100px">
+        <div id="upload-container" style="display: none;">
+          <div id="upload-border">
+            <nobr>
+              <input type="text" id="upload-name" placeholder="Profile photo" disabled="true" />
+              <button id="upload-button" type="button">Update Vehicle photo</button>
+            </nobr>
+          </div>
+          <input type="file" id="hidden-upload" name="imgle" style="display:none"/> 
+        </div>
+    </div>
+    <div class="nmm">  
+        <label>Name:</label>
+        <input class="name" type="text" name="f_name" id="nm" placeholder="Name" value="{{ d.name }}" disabled="true">
+        </div>
+        <div class="spdd">
+        <label>Speed:</label>
+        <input class="name" type="text" name="l_name" id="spd" placeholder="Speed" value="{{ d.speed }}" disabled="true">
+        </div>
+        <div class="agg">
+        <label>Avg_speed:</label>
+        <input class="name" type="text" name="u_name" id="avspd" placeholder="Average Speed" value="{{ d.average_speed }}" disabled="true">
+        </div>
+        <div class="tmp">
+        <label>Temprature:</label>
+        <input class="name" type="text" name="temp" id="temm" placeholder="Temprature" value="{{ d.Temprature }}" disabled="true">
+        </div>
+        <div class="lvl">
+        <label>Fuel level:</label>
+        <input class="name" type="text" name="level" id="levl" placeholder="Fuel level" value="{{ d.Fuel_level }}" disabled="true">
+        </div>
+        <div class="boxer"> 
+        {% if d.Engine_status %}
+        <input  type="checkbox" name="sts" id="ests"  disabled="true" checked><span>Engine status</span>
+        
+        {% else %}
+        <input  type="checkbox" name="sts" id="ests" disabled="true"><span>Engine status</span>
+        {% endif %}
+        </div>
+        <button type="submit" id="add_vehicle" style="display: none;">Save</button>
+    </div>
+</div>
+<div class="btncont" style="text-align: center;">
+<button type="button" style="cursor: pointer;" id="updt" onclick="ups()">Update</button>
+<button type="button" style="cursor:pointer;" id="dlt"><a href="/delete_vehicle/{{ pk }}/">Delete</a></button>
+</div>
+</form>
+{% endfor %}
+</div>
+</body>
+<script>
+  pk='{{ pk }}'
+   document.querySelector("#upload-button").addEventListener("click", () => {
+  //clicks on the file input
+  document.querySelector("#hidden-upload").click();
+});
+
+//adds event listener on the hidden file input to listen for any changes
+document.querySelector("#hidden-upload").addEventListener("change", (event) => {
+  //gets the file name
+  document.querySelector("#upload-name").value = event.target.files[0].name;
+}); 
+document.getElementById('add_vehicle').addEventListener('click',add_vehicle)
+ 
+    function closemsg(d){
+    document.getElementById('msbx').style.display="none";
+    }
+  function ups(){
+    document.getElementById('updt').style.display='none';
+    document.getElementById('dlt').style.display='none';
+    document.getElementById('upload-container').style.display='';
+    document.getElementById('add_vehicle').style.display='';
+    document.getElementById('ests').disabled=false;
+    document.getElementById('levl').disabled=false;
+    document.getElementById('avspd').disabled=false;
+    document.getElementById('spd').disabled=false;
+    document.getElementById('nm').disabled=false;
+    document.getElementById('temm').disabled=false;
+  }
+
+ 
+    
+
+</script>
+</html>

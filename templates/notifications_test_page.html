@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}"> 
+</head>
+<body>
+    <div class="sidebar">
+        <h3 style="text-align: center;font-size: 22px;">Logo</h3>
+        <div class="navmen">
+      <a  href="/">Home</a>
+      <a  href="/add_form/">Add Vehicle</a>
+      <a  href="/shupd/">Update Vehicle</a>
+      <a class="active" href="/notifications/">Notifications</a>
+    </div>
+    </div>
+    <div class="pht">
+        <div class="blak"></div>
+      </div> 
+      <div class="content"> 
+    <h3 id="ntfy"></h3></div>
+</body>
+<script>
+    var loc = window.location
+    var wsStart = "ws://"
+    if (loc.protocol == "https:"){
+        wsStart = "ws/sc/"
+    }
+    var webSocketEndpoint =    loc.host +'/'+wsStart+ '/notifications/'  
+
+
+    var socket = new WebSocket('ws://'+window.location.host+'/'+'ws/sc/'+'notifications/') // Creating a new Web Socket Connection
+
+    socket.onmessage = function(e){
+        console.log('message', e);
+        console.log(e.data)  
+        document.getElementById('ntfy').innerHTML=e.data    }
+
+    // Socket Connet Functionality
+    socket.onopen = function(e){
+        console.log('open', e)
+    }
+
+    // Socket Error Functionality
+    socket.onerror = function(e){
+        console.log('error', e)
+    }
+
+    // Socket close Functionality
+    socket.onclose = function(e){
+        console.log('closed', e)
+    }
+</script>
+</html>

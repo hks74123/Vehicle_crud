@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<div class="sidebar">
+    <h3 style="text-align: center;font-size: 22px;">Logo</h3>
+    <div class="navmen">
+  <a class="active" href="/">Home</a>
+  <a href="/add_form/">Add Vehicle</a>
+  <a href="/shupd/">Update Vehicle</a>
+  <a href="/notifications/">Notifications</a>
+</div>
+</div>
+<div class="pht">
+  <div class="blak"></div>
+</div>
+<div class="content"> 
+ 
+<div class="list">
+  {% for mes in messages %}
+  <h3>{{ mes }}</h3>
+  {% endfor %}
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Speed</th>
+      <th>Average speed</th>
+      <th>Temprature</th>
+      <th>Fuel level</th>
+      <th>Engine status</th>
+    </tr>
+    {% for d in dtl %}
+    <tr>
+      <td><a id="{{ d.id }}" href="show_details/{{ d.id }}/" style="cursor: pointer;">{{ d.name }}</a></td>
+      <td>{{ d.speed }} Km/hr</td>
+      <td>{{ d.average_speed }} Km/hr</td>
+      <td>{{ d.Temprature }} C</td>
+      <td>{{ d.Fuel_level }} L</td>
+      {% if d.Engine_status %}
+      <td>ON</td>
+      {% else %}
+      <td>OFF</td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </table>
+  
+</div>
+</div>
+</body>
+</html>
